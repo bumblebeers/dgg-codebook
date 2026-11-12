@@ -19,13 +19,24 @@
 
 ```bash
 pip install git+https://github.com/bumblebeers/dgg-codebook.git
-# Or for local editable development:
-git clone https://github.com/bumblebeers/dgg-codebook.git && cd dgg-codebook && pip install -e .[test]
+```
+
+## Quickstart
+
+```python
+import torch
+from dgg_codebook import build_multimodal_target_distribution, compute_expected_vocabulary_embedding
+
+mode_ids = torch.randint(0, 262144, (2, 256, 8))
+mode_weights = torch.softmax(torch.randn(2, 256, 8), dim=-1)
+ids, q_tilde = build_multimodal_target_distribution(mode_ids, mode_weights, w_thresh=0.05)
+embed_table = torch.randn(262144, 64)
+e_soft = compute_expected_vocabulary_embedding(ids, q_tilde, embed_table)  # -> (2, 256, 64)
 ```
 
 ## Related Resources
 
 - **Main Research & Benchmark Repository**: [bumblebeers/dgg2-latent-code-graphs](https://github.com/bumblebeers/dgg2-latent-code-graphs)
 - **Pretrained Adapters & ImageDecoder Weights**: [bumblebeer/dgg2-latent-code-graphs-adapters](https://huggingface.co/bumblebeer/dgg2-latent-code-graphs-adapters)
-- **AST Code-Graph Benchmark Packs**: [bumblebeer/dgg2-code-graph-benchmarks](https://huggingface.co/datasets/bumblebeer/dgg2-code-graph-benchmarks)
+- **AST Code-Graph Benchmark Packs & Raw Predictions**: [bumblebeer/dgg2-code-graph-benchmarks](https://huggingface.co/datasets/bumblebeer/dgg2-code-graph-benchmarks)
 - **License**: Apache-2.0
